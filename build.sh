@@ -1,18 +1,23 @@
 #!/bin/bash
 
-#login into DockerHub:
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASS
+set -e
 
-#stopping existing container:
-docker stop react
-docker rm react
+# Login to Docker Hub
+echo "$DOCKER_PASS" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-#building a image:
-docker build -t react-ci/cd .
+# Stop and remove old container if it exists
+docker stop react || true
+docker rm react || true
 
-#running a container from the created image:
-docker run -d -it --name react -p 80:80 react-ci/cd
+# Build image
+docker build -t react-deployment:latest .
 
-#pushing the image to dockerhub:
-docker tag react-ci/cd naveen712/react-app:ci-cd
-docker push naveen712/react-app:ci-cd
+# Tag for Docker Hub
+docker tag react-deployment:latest varun7560/react-deployment:latest
+
+# Push to Docker Hub
+docker push varun7560/react-deployment:latest
+
+# Run container
+docker run -d --name react -p 8081:80 react-deployment:latest
+
