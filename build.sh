@@ -10,14 +10,16 @@ docker stop react || true
 docker rm react || true
 
 # Build image
-docker build -t react-deployment:latest .
+docker build -t react-cicd:latest .
+
+# Run container	
+docker run -d -it --name react -p 80:80 react-cicd:latest
 
 # Tag for Docker Hub
-docker tag react-deployment:latest varun7560/react-deployment:latest
+docker tag react-cicd:latest varun7560/react-cicd:v${BUILD_NUMBER}
 
 # Push to Docker Hub
-docker push varun7560/react-deployment:latest
+docker push varun7560/react-cicd:v${BUILD_NUMBER}
 
-# Run container
-docker run -d --name react -p 8081:80 react-deployment:latest
-
+echo "============= Depolyment Completed =========="
+echo  "React version Deployed: v${BUILD_NUMBER}"
