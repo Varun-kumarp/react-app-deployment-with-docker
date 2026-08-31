@@ -1,0 +1,53 @@
+e \
+            -t "${FULL_IMAGE}" \
+            -t "${IMAGE_NAME}:latest" \
+            .
+
+   ===="
+        echo "DEPLOYING REACT APPLICATION"
+        echo "=========================================="
+
+        echo "Stopping old container..."
+
+        docker stop "${CONTAINER_NAME}" || true
+
+        echo "Removing old container..."
+
+        docker rm "${CONTAINER_NAME}" || true
+
+        echo "Starting new React container..."
+
+        docker run -d \
+            --name "${CONTAINER_NAME}" \
+            -p 80:80 \
+            "${FULL_IMAGE}"
+
+        echo "React container started."
+
+        echo "=========================================="
+        echo "DEPLOYMENT DETAILS"
+        echo "=========================================="
+
+        echo "Container : ${CONTAINER_NAME}"
+        echo "Image     : ${FULL_IMAGE}"
+        echo "Port      : 80"
+
+        ;;
+
+
+    *)
+
+        echo "Usage:"
+        echo "./build.sh build"
+        echo "./build.sh push"
+        echo "./build.sh deploy"
+
+        exit 1
+
+        ;;
+
+esac
+
+echo "=========================================="
+echo "Operation Completed Successfully"
+echo "=========================================="
