@@ -75,7 +75,7 @@ pipeline {
 
         stage('Deploy React Application') {
             steps {
-                echo "Deploying React application..."
+                echo "Deploying React application."
 
                 sh './build.sh deploy'
             }
@@ -83,7 +83,7 @@ pipeline {
 
         stage('Verify Deployment') {
             steps {
-                echo 'Checking running Docker containers...'
+                echo 'Checking running Docker containers.'
 
                 sh '''
                     echo "=========================================="
