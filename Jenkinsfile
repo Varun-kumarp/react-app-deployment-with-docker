@@ -7,7 +7,7 @@ pipeline {
         FULL_IMAGE = "${IMAGE_NAME}:v${BUILD_NUMBER}"
     }
 
-    stages {
+        stages {
 
         stage('Checkout') {
             steps {
@@ -17,14 +17,24 @@ pipeline {
          }
 	
 	stage('SonarQube Analysis') {
- 	   steps {
-        	echo 'Running SonarQube code quality analysis...'
+         steps {
+           echo 'Running SonarQube code quality analysis...'
 
-        	withSonarQubeEnv('SonarQube') {
-            	sh 'sonar-scanner'
-       		 }
-   	      }
+            script {
+              def scannerHome = tool 'SonarScanner'
+
+                withSonarQubeEnv('SonarQube') {
+                  sh """
+                      ${scannerHome}/bin/sonar-scanner \
+                      -Dsonar.projectKey=react-cicd \
+                      -Dsonar.projectName=React-CI-CD \
+                      -Dsonar.sources=. \
+                      -Dsonar.exclusions=node_modules/**,build/**,dist/**
+                  """
+                }
            }
+         }
+       }
 
 	stage('Quality Gate') {
  	   steps {
