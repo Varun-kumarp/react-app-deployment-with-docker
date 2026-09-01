@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-      sonarRunner 'SonarScanner'
-    }
-
     environment {
         IMAGE_NAME = 'varun7560/react-cicd'
         IMAGE_TAG  = "v${BUILD_NUMBER}"
