@@ -16,6 +16,21 @@ pipeline {
             }
          }
 	
+        stage('Check SonarScanner') {
+            steps {
+              script {
+                def scannerHome = tool 'SonarScanner'
+
+                echo "SonarScanner Home: ${scannerHome}"
+
+                sh """
+                   echo "Checking SonarScanner..."
+                   ${scannerHome}/bin/sonar-scanner --version
+                """
+              }
+            }
+        }
+
 	stage('SonarQube Analysis') {
          steps {
            echo 'Running SonarQube code quality analysis...'
